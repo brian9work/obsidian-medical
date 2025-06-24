@@ -1,0 +1,65 @@
+package com.obsidian.medical.service;
+
+import com.obsidian.medical.auth.AuthResponse;
+import com.obsidian.medical.dto.auth.LoginRequestDTO;
+import com.obsidian.medical.dto.auth.LogupRequestDTO;
+import com.obsidian.medical.dto.auth.UserRole;
+import com.obsidian.medical.jwt.JwtService;
+import com.obsidian.medical.model.UserModel;
+import com.obsidian.medical.repository.IUserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+    private final IUserRepository iuserRepository;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthResponse login(LoginRequestDTO request) {
+        System.out.println("Intentando autenticar usuario: " + request.getUsername() + ":"+request.getPassword());
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    request.getUsername(),
+                    request.getPassword()
+            ));
+            System.out.println("Autenticación exitosa.");
+        } catch (Exception e) {
+            System.out.println("Falló autenticación: " + e.getMessage());
+        }
+        System.out.println("Buscando usuario: " + request.getUsername());
+        UserDetails user=iuserRepository.findByUsername(request.getUsername()).orElseThrow();
+        String token=jwtService.getToken(user);
+        return (AuthResponse.builder()
+                .token(token)
+                .build());
+    }
+
+    public AuthResponse logup(LogupRequestDTO request) {
+        UserModel user = UserModel
+                .builder()
+                .username(request.getUsername())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .isActive("1")
+                .role(UserRole.USER)
+                .build();
+
+        iuserRepository.save(user);
+
+        return AuthResponse.builder()
+                .token(jwtService.getToken(user))
+                .build();
+
+    }
+}
