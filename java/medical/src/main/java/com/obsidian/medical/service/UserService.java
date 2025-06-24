@@ -34,25 +34,28 @@ public class UserService {
                     request.getPassword()
             ));
             System.out.println("Autenticación exitosa.");
+            System.out.println("Buscando usuario: " + request.getUsername());
+            UserDetails user=iuserRepository.findByUsername(request.getUsername()).orElseThrow();
+            String token=jwtService.getToken(user);
+            return (AuthResponse.builder()
+                    .token(token)
+                    .build());
         } catch (Exception e) {
             System.out.println("Falló autenticación: " + e.getMessage());
+            return AuthResponse.builder()
+                    .token(null) // o ""
+                    .build();
         }
-        System.out.println("Buscando usuario: " + request.getUsername());
-        UserDetails user=iuserRepository.findByUsername(request.getUsername()).orElseThrow();
-        String token=jwtService.getToken(user);
-        return (AuthResponse.builder()
-                .token(token)
-                .build());
     }
 
     public AuthResponse logup(LogupRequestDTO request) {
         UserModel user = UserModel
                 .builder()
                 .username(request.getUsername())
-                .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .isActive("1")
                 .role(UserRole.USER)
+                .email(request.getEmail())
+                .isActive("1")
                 .build();
 
         iuserRepository.save(user);

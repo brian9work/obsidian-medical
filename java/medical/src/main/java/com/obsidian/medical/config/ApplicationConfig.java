@@ -30,6 +30,7 @@ public class ApplicationConfig {
     public AuthenticationProvider authenticationProvider()
     {
         DaoAuthenticationProvider authenticationProvider= new DaoAuthenticationProvider();
+//        authenticationProvider.setUserDetailsPasswordService(userDetailService(),passwordEncoder());
         authenticationProvider.setUserDetailsService(userDetailService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
