@@ -27,14 +27,11 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponse login(LoginRequestDTO request) {
-        System.out.println("Intentando autenticar usuario: " + request.getUsername() + ":"+request.getPassword());
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     request.getUsername(),
                     request.getPassword()
             ));
-            System.out.println("Autenticación exitosa.");
-            System.out.println("Buscando usuario: " + request.getUsername());
             UserDetails user=iuserRepository.findByUsername(request.getUsername()).orElseThrow();
             Optional<UserModel> userRole = iuserRepository.findByUsername(request.getUsername());
 
@@ -43,15 +40,12 @@ public class UserService {
             String role = userRole.get().getRole().toString();
             String email = userRole.get().getEmail();
 
-            System.out.println("_________ email"+email);
-
             return (AuthResponse.builder()
                     .token(token)
                     .role(role)
                     .email(email)
                     .build());
         } catch (Exception e) {
-            System.out.println("Falló autenticación: " + e.getMessage());
             return AuthResponse.builder()
                     .token(null) // o ""
                     .build();
