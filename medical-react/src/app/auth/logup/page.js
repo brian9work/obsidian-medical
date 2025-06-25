@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
    const router = useRouter();
-   const { setTokenLocalStorage, setRoleLocalStorage, setEmailLocalStorage  } = useContextApp();
+   const { setTokenLocalStorage, setRoleLocalStorage, setEmailLocalStorage } = useContextApp();
    const [user, setUser] = useState("user123")
    const [email, setEmail] = useState("michl521521@gmail.com")
    const [password, setPassword] = useState("1234567890")
@@ -57,12 +57,18 @@ export default function Home() {
             },
             body: JSON.stringify(object)
          })
-         const data = await response.json()
-         console.log("Respuesta del servidor:", data);
-         setTokenLocalStorage(data.token);
-         setEmailLocalStorage(email);
-         setIsLoading(false);
-         router.push('/home');
+         try {
+            const data = await response.json()
+            console.log("Respuesta del servidor:", data);
+            setTokenLocalStorage(data.token);
+            setEmailLocalStorage(email);
+            setIsLoading(false);
+            // router.push('/home');
+
+         } catch (error) {
+            alert("El usuario o la contraseña ya existen, por favor intenta con otro nombre de usuario.");
+            setIsLoading(false);
+         }
 
       } catch (error) {
          console.error("Error al enviar los datos:", error);
