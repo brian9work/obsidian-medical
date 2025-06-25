@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/login")
-//    public String login(@RequestBody LoginRequestDTO request) {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {
-        System.out.println("\n\n\n ******************** \n\n\n");
-        System.out.println("login");
-//        return userService.login(request);
         return ResponseEntity.ok(userService.login(request));
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/logup")
     public ResponseEntity<AuthResponse> logup(@RequestBody LogupRequestDTO request) {
         return ResponseEntity.ok(userService.logup(request));
     }
+
 }

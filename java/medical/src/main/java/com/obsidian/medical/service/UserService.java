@@ -36,9 +36,19 @@ public class UserService {
             System.out.println("Autenticación exitosa.");
             System.out.println("Buscando usuario: " + request.getUsername());
             UserDetails user=iuserRepository.findByUsername(request.getUsername()).orElseThrow();
+            Optional<UserModel> userRole = iuserRepository.findByUsername(request.getUsername());
+
+
             String token=jwtService.getToken(user);
+            String role = userRole.get().getRole().toString();
+            String email = userRole.get().getEmail();
+
+            System.out.println("_________ email"+email);
+
             return (AuthResponse.builder()
                     .token(token)
+                    .role(role)
+                    .email(email)
                     .build());
         } catch (Exception e) {
             System.out.println("Falló autenticación: " + e.getMessage());
@@ -64,5 +74,14 @@ public class UserService {
                 .token(jwtService.getToken(user))
                 .build();
 
+    }
+
+    public String getRole(String email) {
+        Optional<UserModel> user = iuserRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException(email);
+        }
+
+        return user.get().getRole().toString();
     }
 }
