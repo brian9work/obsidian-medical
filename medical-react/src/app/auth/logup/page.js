@@ -63,7 +63,7 @@ export default function Home() {
             setTokenLocalStorage(data.token);
             setEmailLocalStorage(email);
             setIsLoading(false);
-            // router.push('/home');
+            router.push('/home');
 
          } catch (error) {
             alert("El usuario o la contraseña ya existen, por favor intenta con otro nombre de usuario.");

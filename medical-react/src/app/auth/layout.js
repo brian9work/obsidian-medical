@@ -11,7 +11,9 @@ export default function RootLayout({ children }) {
    },[])
 
    return (
-      <div className="relative">
+      <div className="relative overflow-x-hidden "
+         // style={{maxWidth: "100vw", maxHeight: "100vh"}}
+      >
          <div>
             {children}
          </div>

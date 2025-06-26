@@ -74,7 +74,7 @@ export default function RootLayout({ children }) {
    }, []);
 
    return (
-      <div className="relative">
+      <div className="relative overflow-x-hidden ">
          <div>
             {children}
          </div>
