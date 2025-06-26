@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "userb")
 public class UserModel implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +30,7 @@ public class UserModel implements UserDetails {
     String isActive;
     @Enumerated(EnumType.STRING)
     UserRole role;
+    String tmp;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

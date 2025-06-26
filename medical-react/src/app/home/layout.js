@@ -30,7 +30,8 @@ export default function RootLayout({ children }) {
                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({
-               email: email
+               email: email,
+               token: token
             })
          })
 
@@ -46,6 +47,15 @@ export default function RootLayout({ children }) {
          }
 
          const data = await response.text();
+
+         if (!data || data === "null") {
+            console.error("No role data received from server.");
+            // router.push('/auth/login');
+            // localStorage.setItem("token", null);
+            // localStorage.setItem("email", null);
+            return;
+         }
+
          setTokenLocalStorage(token);
          setEmailLocalStorage(email);
          setRoleLocalStorage(data);
@@ -64,7 +74,7 @@ export default function RootLayout({ children }) {
    }, []);
 
    return (
-      <div className="relative">
+      <div className="relative overflow-x-hidden ">
          <div>
             {children}
          </div>

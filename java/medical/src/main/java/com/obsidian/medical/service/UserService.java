@@ -32,13 +32,18 @@ public class UserService {
                     request.getUsername(),
                     request.getPassword()
             ));
-            UserDetails user=iuserRepository.findByUsername(request.getUsername()).orElseThrow();
+            UserDetails userDet=iuserRepository.findByUsername(request.getUsername()).orElseThrow();
+
             Optional<UserModel> userRole = iuserRepository.findByUsername(request.getUsername());
+            UserModel user = userRole.get();
 
+            String token=jwtService.getToken(userDet);
+            String role = user.getRole().toString();
+            String email = user.getEmail();
 
-            String token=jwtService.getToken(user);
-            String role = userRole.get().getRole().toString();
-            String email = userRole.get().getEmail();
+            System.out.println("tmp token: " +token);
+            user.setTmp(token);
+            iuserRepository.save(user);
 
             return (AuthResponse.builder()
                     .token(token)
@@ -53,6 +58,19 @@ public class UserService {
     }
 
     public AuthResponse logup(LogupRequestDTO request) {
+        Optional<UserModel> validateEmail = iuserRepository.findByEmail(request.getEmail());
+
+        if (validateEmail.isPresent()) {
+            System.out.println("El correo ya existe");
+            return null;
+        }
+
+        Optional<UserModel> validateUser = iuserRepository.findByUsername(request.getUsername());
+        if (validateUser.isPresent()) {
+            System.out.println("El usuario ya existe");
+            return null;
+        }
+
         UserModel user = UserModel
                 .builder()
                 .username(request.getUsername())
@@ -62,20 +80,32 @@ public class UserService {
                 .isActive("1")
                 .build();
 
+        String token=jwtService.getToken(user);
+
+        user.setTmp(token);
         iuserRepository.save(user);
 
         return AuthResponse.builder()
-                .token(jwtService.getToken(user))
+                .token(token)
                 .build();
 
     }
 
-    public String getRole(String email) {
+    public String getRole(String email, String token) {
+        System.out.println("buscando correo");
         Optional<UserModel> user = iuserRepository.findByEmail(email);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException(email);
         }
 
+        System.out.println("\n\n\n");
+        System.out.println("temporal: " + user.get().getTmp());
+        System.out.println("token: " + token);
+
+        if(!user.get().getTmp().equals(token)){
+            System.out.println("El correo no coincide con el token");
+            throw new UsernameNotFoundException(email);
+        }
         return user.get().getRole().toString();
     }
 }
