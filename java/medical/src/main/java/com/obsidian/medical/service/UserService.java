@@ -41,7 +41,6 @@ public class UserService {
             String role = user.getRole().toString();
             String email = user.getEmail();
 
-            System.out.println("tmp token: " +token);
             user.setTmp(token);
             iuserRepository.save(user);
 
@@ -92,7 +91,6 @@ public class UserService {
     }
 
     public String getRole(String email, String token) {
-        System.out.println("buscando correo");
         Optional<UserModel> user = iuserRepository.findByEmail(email);
         if (user.isEmpty()) {
             throw new UsernameNotFoundException(email);
@@ -100,7 +98,7 @@ public class UserService {
 
         System.out.println("\n\n\n");
         System.out.println("temporal: " + user.get().getTmp());
-        System.out.println("token: " + token);
+        System.out.println("token   : " + token);
 
         if(!user.get().getTmp().equals(token)){
             System.out.println("El correo no coincide con el token");

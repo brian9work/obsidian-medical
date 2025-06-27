@@ -7,11 +7,11 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 import { useContextApp } from '@/context/ContextApp'
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: Home },
-  { name: "Pacientes", href: "/dashboard/pacientes", icon: Users },
-  { name: "Citas", href: "/dashboard/citas", icon: Calendar },
-  { name: "Expedientes", href: "/dashboard/expedientes", icon: FileText },
-   { name: "Salir", href: "/dashboard/expedientes", icon: LogOutIcon },
+  { name: "Dashboard", href: "/home", icon: Home },
+  // { name: "Pacientes", href: "/dashboard/pacientes", icon: Users },
+  { name: "Citas", href: "/home/citas", icon: Calendar },
+  { name: "Expedientes", href: "/home/expedientes", icon: FileText },
+   { name: "Salir", href: "/auth/login", icon: LogOutIcon },
 ]
 
 export default function Layout({ children }) {

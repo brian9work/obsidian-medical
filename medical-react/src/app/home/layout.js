@@ -3,10 +3,12 @@ import { useContextApp } from "@/context/ContextApp";
 import "../globals.css";
 import { use, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Layout from "@/components/panel/admin/Layout";
+import BreadcrumbPath from "@/components/panel/admin/BreadcrumbPath";
 
 export default function RootLayout({ children }) {
    const router = useRouter();
-   const { setTokenLocalStorage, setRoleLocalStorage, setEmailLocalStorage } = useContextApp();
+   const { role, setTokenLocalStorage, setRoleLocalStorage, setEmailLocalStorage } = useContextApp();
 
    const getTokenFromLocalStorage = async () => {
       const token = localStorage.getItem("token");
@@ -71,11 +73,26 @@ export default function RootLayout({ children }) {
    useEffect(() => {
       getTokenFromLocalStorage();
 
-   }, []);
+   }, [role]);
+
+    if (role === "ADMIN") {
+         return (
+            <div>
+               <Layout />
+               <div className="w-11/12 max-w-[1000px] mx-auto mt-10">
+               <BreadcrumbPath />
+               <div className="mt-3">
+                  {children}
+               </div>
+               </div>
+            </div>
+         )
+      }
 
    return (
       <div className="relative overflow-x-hidden ">
          <div>
+               <Layout />
             {children}
          </div>
       </div>

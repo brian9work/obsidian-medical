@@ -1,5 +1,6 @@
 "use client"
 import Admin from "@/components/panel/admin/Admin";
+import Layout from "@/components/panel/admin/Layout";
 import User from "@/components/panel/user/User";
 import { useContextApp } from "@/context/ContextApp";
 import { useRouter } from "next/navigation";
@@ -11,7 +12,9 @@ export default function Home() {
 
    if (role === "ADMIN") {
       return (
-         <Admin />
+         <div>
+            <Admin />
+         </div>
       )
    }
 

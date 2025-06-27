@@ -12,7 +12,7 @@ import { Stethoscope } from "lucide-react";
 export default function Home() {
    const router = useRouter();
    const { setTokenLocalStorage, setRoleLocalStorage, setEmailLocalStorage } = useContextApp();
-   const [user, setUser] = useState("abc1")
+   const [user, setUser] = useState("abc")
    const [password, setPassword] = useState("1234567890")
    const [isLoading, setIsLoading] = useState(false)
 
@@ -88,7 +88,6 @@ export default function Home() {
             </CardHeader>
             <CardContent>
                <form onSubmit={handleSubmit} className="space-y-4">
-
                   <div className="space-y-2">
                      <Label htmlFor="email">Nombre de usuario</Label>
                      <Input

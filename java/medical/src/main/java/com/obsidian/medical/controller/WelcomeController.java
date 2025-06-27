@@ -19,10 +19,6 @@ public class WelcomeController {
     public String welcome(@RequestBody Map<String, Object> body) {
         String email = (String) body.get("email");
         String tokenTmp = (String) body.get("token");
-        System.out.println("Recieved information");
-        System.out.println(email);
-        System.out.println(tokenTmp);
-        System.out.println("--------");
         if (email == null || tokenTmp == null) {
             System.out.println("no se recibieron los valores");
             return null;
