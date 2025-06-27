@@ -15,11 +15,11 @@ export default function Home() {
    const { token, email } = useContextApp();
    const router = useRouter();
 
-   const [urlImage, setUrlImage] = useState("1")
+   const [file, setFile] = useState("1")
    const [name, setName] = useState("2")
    const [lastnamep, setLastnamep] = useState("3")
    const [lastnamem, setLastnamem] = useState("4")
-   const [birthdate, setBirthdate] = useState("2003-01-01") 
+   const [birthdate, setBirthdate] = useState("2003-01-01")
    const [gender, setGender] = useState("indefinido")
    const [historial, setHistorial] = useState("6")
 
@@ -29,9 +29,34 @@ export default function Home() {
       return `${dia}-${mes}-${año}`;
    }
 
+   const sendImage = async () => {
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("http://localhost:8080/expedient/image", {
+         method: "POST",
+         headers: {
+            "Authorization": `Bearer ${token}`
+         },
+         body: formData,
+      });
+
+      const text = await res.text();
+      return text;
+   }
+
    const sendData = async (e) => {
       e.preventDefault();
       setLoading(true);
+
+      const urlImage = await sendImage();
+      if (!urlImage) {
+         alert("Error al subir la imagen. Por favor, intenta nuevamente.");
+         setLoading(false);
+         return;
+      }
 
       const object = {
          email: email,
@@ -55,10 +80,6 @@ export default function Home() {
             },
             body: JSON.stringify(object)
          })
-         console.log("----------------------")
-         console.log(response)
-         console.log(response.status)
-         console.log("----------------------")
 
          if (!response.ok) {
             console.error("Network response was not ok:", response.statusText);
@@ -79,14 +100,21 @@ export default function Home() {
 
    return (
       <div className="shadow-xl p-7">
-         <form onSubmit={sendData}>
+         <form onSubmit={sendData} encType="multipart/form-data">
+            {/* <form onSubmit={sendData} encType="multipart/form-data"> */}
             <div>
                <h2 className="font-bold text-2xl">Agregar expediente</h2>
             </div>
             <div className="flex flex-col gap-6 mt-4">
                <div className="grid w-full max-w-sm items-center gap-3">
                   <Label htmlFor="picture">Picture</Label>
-                  <Input id="picture" type="file" />
+                  <Input
+                     id="picture"
+                     type="file"
+                     accept="image/*"
+                     onChange={(e) => setFile(e.target.files[0])}
+                     required
+                  />
                </div>
                <div className="flex flex-row gap-4">
                   <div className="w-[40%]">

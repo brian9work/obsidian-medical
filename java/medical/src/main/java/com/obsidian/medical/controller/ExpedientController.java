@@ -11,6 +11,9 @@ import com.obsidian.medical.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
 
 import java.util.List;
 
@@ -24,8 +27,13 @@ public class ExpedientController {
     @CrossOrigin(origins = "*")
     @PostMapping("/save")
     public ResponseEntity save(@RequestBody ExpedientRequestDTO request) {
-        System.out.println("Entroooooo");
         return expedientService.save(request);
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping("/image")
+    public ResponseEntity uploadImage(@RequestParam("file") MultipartFile file) {
+        return expedientService.uploadImage(file);
     }
 
     @CrossOrigin(origins = "*")

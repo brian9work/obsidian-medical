@@ -9,19 +9,46 @@ import com.obsidian.medical.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.Period;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ExpedientService {
     private final IExpedientRepository expedientRepository;
     private final IUserRepository userRepository;
+
+    public ResponseEntity<String> uploadImage(MultipartFile file) {
+        String folderPath = "C:/wamp64/www/obsidian-medical/assets/expedientes";
+        File directory = new File(folderPath);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        Path path = Paths.get(folderPath, filename); // <- Aquí corregido
+        try {
+            Files.write(path, file.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.ok(filename);
+
+    }
+
+
 
     public static String currentTime(String fechaStr) {
         try {
