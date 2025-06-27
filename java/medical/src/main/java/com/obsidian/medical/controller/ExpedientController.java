@@ -41,6 +41,20 @@ public class ExpedientController {
     public List<ExpedientResponseDTO> getAll() {
         return expedientService.getAll();
     }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping("/{id}")
+    public ExpedientResponseDTO getById(@PathVariable("id") Long id) {
+        return expedientService.getById(id);
+    }
+
+    /*
+
+    @GetMapping("/{id}")
+    public UserModel getById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
+     */
 }
 
 /*

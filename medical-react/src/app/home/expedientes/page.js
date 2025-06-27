@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import { LogOutIcon, Plus } from "lucide-react"
 import {
    Table,
    TableBody,
@@ -77,6 +77,7 @@ export default function Home() {
                      <TableHead>Fecha de nacimiento</TableHead>
                      <TableHead>Edad</TableHead>
                      <TableHead>Genero</TableHead>
+                     <TableHead></TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
@@ -89,12 +90,18 @@ export default function Home() {
                         </TableCell>
                      </TableRow>
                   )}
-                  {data.map((item) => (
-                     <TableRow key={item.id}>
-                        <TableCell className="font-medium">{item.id}</TableCell>
+                  {data.map((item, index) => (
+                     <TableRow key={`expediente-${item.id}`} className="hover:bg-gray-100 cursor-pointer">
+                        <TableCell className="font-medium">#{item.id}</TableCell>
                         <TableCell>{item.fullName}</TableCell>
                         <TableCell>{item.birthdate}</TableCell>
                         <TableCell>{item.age} años</TableCell>
+                        <TableCell>{item.gender}</TableCell>
+                        <TableCell>
+                           <Link href={`/home/expedientes/no/${item.id}`} key={item.id}>
+                              <LogOutIcon className="h-4 w-4 text-gray-500 hover:text-gray-900 cursor-pointer" />
+                           </Link>
+                        </TableCell>
                      </TableRow>
                   ))}
                </TableBody>

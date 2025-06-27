@@ -48,8 +48,6 @@ public class ExpedientService {
 
     }
 
-
-
     public static String currentTime(String fechaStr) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -114,6 +112,30 @@ public class ExpedientService {
 
 
         return expedientResponseDTOS;
+    }
+
+    public ExpedientResponseDTO getById(Long id) {
+        Optional<ExpedientModel> expedientModel = expedientRepository.findById(id);
+        ExpedientResponseDTO expedientResponseDTO = new ExpedientResponseDTO();
+
+        if (expedientModel.isEmpty()) {
+            return expedientResponseDTO;
+        }
+
+        ExpedientModel expedient = expedientModel.get();
+
+        expedientResponseDTO.setId(expedient.getId());
+        expedientResponseDTO.setUrlImage(expedient.getUrlImage());
+        expedientResponseDTO.setFullName(
+                expedient.getName() + "-" +
+                        expedient.getLastnamep() + "-" +
+                        expedient.getLastnamem());
+        expedientResponseDTO.setBirthdate(expedient.getBirthdate());
+        expedientResponseDTO.setHistorial(expedient.getHistorial());
+        expedientResponseDTO.setGender(expedient.getGender());
+        expedientResponseDTO.setAge(currentTime(expedient.getBirthdate()));
+
+        return expedientResponseDTO;
     }
 
 }
