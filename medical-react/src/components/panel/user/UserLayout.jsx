@@ -9,23 +9,23 @@ import { useContextApp } from '@/context/ContextApp'
 const navigation = [
    { name: "Dashboard", href: "/dashboard", icon: Home },
    { name: "Mis citas", href: "/dashboard/citas", icon: Calendar },
-   { name: "Mi expediente", href: "/dashboard/expedientes", icon: FileText },
-   { name: "Salir", href: "/dashboard/expedientes", icon: LogOutIcon },
+   { name: "Mi expediente", href: "/home/miexpediente", icon: FileText },
+   { name: "Salir", href: "/auth/login", icon: LogOutIcon },
 ]
 
-export default function Layout({ children }) {
+export default function UserLayout({ children }) {
    const { email } = useContextApp();
    const pathname = usePathname()
 
    return (
-      <header className="min-w-screen shadow-md">
+      <header className="w-full min-w-screen bg-gray-50 shadow-md">
          <div className="w-11/12 mx-auto flex flex-row items-center justify-between py-4">
             <div className="flex flex-row">
                <Stethoscope className="h-8 w-8 text-blue-600" />
                <span className="ml-6 text-xl font-bold text-gray-900">Sistema Médico - User</span>
             </div>
-            <div className=''>
-               <nav className="flex flex-row">
+            <div>
+               <nav className="flex flex-row px-2">
                   {navigation.map((item) => (
                      <Link
                         key={item.name}

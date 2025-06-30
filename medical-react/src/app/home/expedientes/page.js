@@ -14,11 +14,13 @@ import {
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useContextApp } from "@/context/ContextApp"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
    const [data, setData] = useState([])
    const [loading, setLoading] = useState(true)
    const { token } = useContextApp();
+   const router = useRouter();
 
    const getData = async () => {
 
@@ -33,6 +35,7 @@ export default function Home() {
             }
          })
          if (!response.ok) {
+            router.push('/auth/login')
             throw new Error("Network response was not ok")
          }
          console.log("Response status:", response.status)

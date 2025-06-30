@@ -5,7 +5,9 @@ import com.obsidian.medical.dto.auth.LoginRequestDTO;
 import com.obsidian.medical.dto.auth.LogupRequestDTO;
 import com.obsidian.medical.dto.expedient.ExpedientRequestDTO;
 import com.obsidian.medical.dto.expedient.ExpedientResponseDTO;
+import com.obsidian.medical.dto.expedient.UserWithExpedientDTO;
 import com.obsidian.medical.model.ExpedientModel;
+import com.obsidian.medical.model.UserModel;
 import com.obsidian.medical.service.ExpedientService;
 import com.obsidian.medical.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 //    implementation 'org.springframework.boot:spring-boot-starter-web'
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/expedient")
@@ -37,6 +40,20 @@ public class ExpedientController {
     }
 
     @CrossOrigin(origins = "*")
+    @PostMapping("/getexpedient")
+    public ExpedientResponseDTO getExpedient(@RequestBody Map<String, Object> body) {
+        System.out.println("Buscando expediente");
+        String email = (String) body.get("email");
+        System.out.println("email" + email);
+        if (email == null){
+            System.out.println("no se recibieron los valores");
+            return null;
+        }
+//        return new ExpedientResponseDTO();
+        return expedientService.getExpedient(email);
+    }
+
+    @CrossOrigin(origins = "*")
     @GetMapping("")
     public List<ExpedientResponseDTO> getAll() {
         return expedientService.getAll();
@@ -48,35 +65,11 @@ public class ExpedientController {
         return expedientService.getById(id);
     }
 
-    /*
-
-    @GetMapping("/{id}")
-    public UserModel getById(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-     */
-}
-
-/*
-@RestController
-@RequestMapping("/auth")
-@RequiredArgsConstructor
-@CrossOrigin(origins = "*")
-public class UserController {
-
-    private final UserService userService;
-
     @CrossOrigin(origins = "*")
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequestDTO request) {
-        return ResponseEntity.ok(userService.login(request));
+    @GetMapping("/userwithexpedient")
+    public List<UserWithExpedientDTO> findByNotExpedient() {
+        return expedientService.findByNotExpedient();
     }
 
-    @CrossOrigin(origins = "*")
-    @PostMapping("/logup")
-    public ResponseEntity<AuthResponse> logup(@RequestBody LogupRequestDTO request) {
-        return ResponseEntity.ok(userService.logup(request));
-    }
 
 }
- */

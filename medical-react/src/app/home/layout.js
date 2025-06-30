@@ -4,6 +4,7 @@ import "../globals.css";
 import { use, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "@/components/panel/admin/Layout";
+import UserLayout from "@/components/panel/user/UserLayout";
 import BreadcrumbPath from "@/components/panel/admin/BreadcrumbPath";
 
 export default function RootLayout({ children }) {
@@ -75,25 +76,30 @@ export default function RootLayout({ children }) {
 
    }, [role]);
 
-    if (role === "ADMIN") {
-         return (
-            <div>
-               <Layout />
-               <div className="w-11/12 max-w-[1000px] mx-auto mt-10">
+   if (role === "ADMIN") {
+      return (
+         <div>
+            <Layout />
+            <div className="w-11/12 max-w-[1000px] mx-auto mt-10">
                <BreadcrumbPath />
                <div className="mt-3">
                   {children}
                </div>
-               </div>
             </div>
-         )
-      }
+         </div>
+      )
+   }
 
    return (
       <div className="relative overflow-x-hidden ">
          <div>
-               <Layout />
-            {children}
+            <UserLayout />
+            <div className="w-11/12 max-w-[1000px] mx-auto mt-10">
+               <BreadcrumbPath />
+               <div className="mt-3">
+                  {children}
+               </div>
+            </div>
          </div>
       </div>
    );

@@ -64,8 +64,8 @@ export default function Home() {
          setRoleLocalStorage(data.role);
          setEmailLocalStorage(data.email);
 
-         setIsLoading(false);
          router.push('/home');
+         setIsLoading(false);
 
       } catch (error) {
          console.error("Error al enviar los datos:", error);

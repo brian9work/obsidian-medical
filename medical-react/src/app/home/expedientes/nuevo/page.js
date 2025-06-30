@@ -1,204 +1,126 @@
 "use client"
+import {
+   Dialog,
+   DialogContent,
+   DialogTrigger,
+} from "@/components/ui/dialog"
+import {
+   Table,
+   TableBody,
+   TableCaption,
+   TableCell,
+   TableHead,
+   TableHeader,
+   TableRow,
+} from "@/components/ui/table"
+import Expedient from "@/components/panel/admin/Expedient";
+import { useEffect, useState } from "react"
+import { useContextApp } from "@/context/ContextApp"
+import { useRouter } from "next/navigation"
+import { LogOutIcon, Plus } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useContextApp } from "@/context/ContextApp";
-import { Select } from "@radix-ui/react-select";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Home() {
    const [data, setData] = useState([])
    const [loading, setLoading] = useState(true)
-   const { token, email } = useContextApp();
+   const { token } = useContextApp();
    const router = useRouter();
 
-   const [file, setFile] = useState("1")
-   const [name, setName] = useState("2")
-   const [lastnamep, setLastnamep] = useState("3")
-   const [lastnamem, setLastnamem] = useState("4")
-   const [birthdate, setBirthdate] = useState("2003-01-01")
-   const [gender, setGender] = useState("indefinido")
-   const [historial, setHistorial] = useState("6")
-
-
-   function convertirFecha(fecha) {
-      const [año, mes, dia] = fecha.split("-");
-      return `${dia}-${mes}-${año}`;
-   }
-
-   const sendImage = async () => {
-      if (!file) return;
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("http://localhost:8080/expedient/image", {
-         method: "POST",
-         headers: {
-            "Authorization": `Bearer ${token}`
-         },
-         body: formData,
-      });
-
-      const text = await res.text();
-      return text;
-   }
-
-   const sendData = async (e) => {
-      e.preventDefault();
-      setLoading(true);
-
-      const urlImage = await sendImage();
-      if (!urlImage) {
-         alert("Error al subir la imagen. Por favor, intenta nuevamente.");
-         setLoading(false);
-         return;
-      }
-
-      const object = {
-         email: email,
-         urlImage: urlImage,
-         name: name,
-         lastnamep: lastnamep,
-         lastnamem: lastnamem,
-         birthdate: convertirFecha(birthdate),
-         gender: gender,
-         historial: historial,
-      }
-
-      console.log("Datos a enviar:", object);
-
+   const getData = async () => {
       try {
-         const response = await fetch("http://localhost:8080/expedient/save", {
-            method: "POST",
+         const response = await fetch("http://localhost:8080/expedient/userwithexpedient", {
+            method: "GET",
             headers: {
                "Content-Type": "application/json",
+               "Access-Control-Allow-Origin": "*",
+               "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(object)
+            }
          })
-
          if (!response.ok) {
-            console.error("Network response was not ok:", response.statusText);
-            alert("Error al agregar el expediente. Por favor, verifica los datos ingresados.");
-            setLoading(false);
-            return;
+            console.error("Failed to fetch data:", response.statusText)
          }
 
-         const result = await response.text()
-         alert(result)
+         console.log("Response status:", response)
+         const json = await response.json()
+         console.log("Response text:", json)
+         setData(json)
          setLoading(false)
-         router.push('/home/expedientes')
+         // if (!response.ok) {
+         //    console.error("Failed to fetch data:", response.statusText)
+         // router.push('/auth/login')
+         // throw new Error("Network response was not ok")
+         // }
+         // console.log("Response status:", response.status)
+         // const result = await response.json()
+         // console.log("Data fetched successfully:", result)
+         // setData(result)
+         // setLoading(false)
+         // console.log("Data fetched successfully:", result)
+
       }
       catch (error) {
          console.error("Error fetching data:", error)
       }
    }
 
+   useEffect(() => {
+      getData()
+   }, [])
+
    return (
-      <div className="shadow-xl p-7">
-         <form onSubmit={sendData} encType="multipart/form-data">
-            {/* <form onSubmit={sendData} encType="multipart/form-data"> */}
+      <>
+         <div className="flex justify-between items-center">
             <div>
-               <h2 className="font-bold text-2xl">Agregar expediente</h2>
+               <h1 className="text-3xl font-bold">Usuarios sin expediente</h1>
+               <p className="text-muted-foreground">Se encuentran los usuarios registrados que no tienen expediente</p>
             </div>
-            <div className="flex flex-col gap-6 mt-4">
-               <div className="grid w-full max-w-sm items-center gap-3">
-                  <Label htmlFor="picture">Picture</Label>
-                  <Input
-                     id="picture"
-                     type="file"
-                     accept="image/*"
-                     onChange={(e) => setFile(e.target.files[0])}
-                     required
-                  />
-               </div>
-               <div className="flex flex-row gap-4">
-                  <div className="w-[40%]">
-                     <Label className={`mb-2`} htmlFor="nombre">Nombre</Label>
-                     <Input
-                        id="nombre"
-                        type="text"
-                        placeholder=""
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                     />
-                  </div>
-                  <div className="w-[30%]">
-                     <Label className={`mb-2`} htmlFor="lastnameP">Apellido paterno</Label>
-                     <Input
-                        id="lastnameP"
-                        type="text"
-                        placeholder=""
-                        required
-                        value={lastnamep}
-                        onChange={(e) => setLastnamep(e.target.value)}
-                     />
-                  </div>
-                  <div className="w-[30%]">
-                     <Label className={`mb-2`} htmlFor="lastnamem">Apellido materno</Label>
-                     <Input
-                        id="lastnamem"
-                        type="text"
-                        placeholder=""
-                        required
-                        value={lastnamem}
-                        onChange={(e) => setLastnamem(e.target.value)}
-                     />
-                  </div>
-               </div>
-               <div className="flex flex-row gap-4">
-                  <div className="w-[50%]">
-                     <Label className={`mb-2`} htmlFor="birthdate">Fecha de nacimiento</Label>
-                     <Input
-                        id="birthdate"
-                        type="date"
-                        placeholder=""
-                        required
-                        value={birthdate}
-                        onChange={(e) => setBirthdate(e.target.value)}
-                     />
-                  </div>
-                  <div className="w-[50%]">
-                     <Label className={`mb-2`} htmlFor="username">Genero</Label>
-                     <Select className="bg-white" onValueChange={(value) => setGender(value)} value={gender}>
-                        <SelectTrigger className="w-full">
-                           <SelectValue placeholder="Genero" />
-                        </SelectTrigger>
-                        <SelectContent className={`bg-white`}>
-                           <SelectItem value="masculino">Masculino</SelectItem>
-                           <SelectItem value="femenino">Femenino</SelectItem>
-                           <SelectItem value="indefinido">Prefiero no decirlo</SelectItem>
-                        </SelectContent>
-                     </Select>
-                  </div>
-               </div>
-               <div className="flex flex-row gap-4">
-                  <div className="grid w-full gap-3">
-                     <Label htmlFor="historial">Antecedentes médicos</Label>
-                     <Textarea
-                        placeholder="Antecedentes médicos."
-                        id="message"
-                        value={historial}
-                        onChange={(e) => setHistorial(e.target.value)}
-                     />
-                     <p className="text-sm -mt-3">Enfermedades previas, cirugias, alergias y enfermedades familiares</p>
-                  </div>
-               </div>
-            </div>
-            <div className="flex justify-end ">
-               <Button
-                  type="submit"
-                  className={"w-[300px] cursor-pointer mt-5 py-2 bg-gray-900 text-white hover:bg-gray-800"}
-               >
-                  {loading ? "Agregar Expediente" : "Agregando..."}
-               </Button>
-            </div>
-         </form>
-      </div>
+         </div>
+         <div className="mt-5">
+            <Table>
+               <TableCaption>Lista de expedientes.</TableCaption>
+               <TableHeader >
+                  <TableRow className={"bg-gray-900 text-white rounded-t-2xl"}>
+                     <TableHead>Id</TableHead>
+                     <TableHead>Username</TableHead>
+                     <TableHead>Correo</TableHead>
+                     <TableHead></TableHead>
+                  </TableRow>
+               </TableHeader>
+               <TableBody>
+                  {loading && (
+                     <TableRow>
+                        <TableCell colSpan={5} className="text-center">
+                           <div className="flex justify-center items-center h-32">
+                              <p className="font-bold">Cargando...</p>
+                           </div>
+                        </TableCell>
+                     </TableRow>
+                  )}
+                  {data.map((item, index) => (
+                     <TableRow key={`expediente-${item.id}`} className="hover:bg-gray-100 cursor-pointer">
+                        <TableCell className="font-medium">#{item.id}</TableCell>
+                        <TableCell>{item.username}</TableCell>
+                        <TableCell>{item.email}</TableCell>
+                        <TableCell>
+                           <Dialog>
+                              <DialogTrigger>
+                                 <Button className={"bg-gray-900 text-white hover:bg-gray-800 cursor-pointer"}>
+                                    <Plus className="mr-2 h-4 w-4" />
+                                    Agregar Expediente
+                                 </Button>
+                              </DialogTrigger>
+                              <DialogContent className={`bg-white shadow-lg rounded-lg w-11/12 max-w-[1000px]`}>
+                                 <Expedient email={item.email} />
+                              </DialogContent>
+                           </Dialog>
+                        </TableCell>
+                     </TableRow>
+                  ))}
+               </TableBody>
+            </Table>
+         </div>
+      </>
    )
 }
