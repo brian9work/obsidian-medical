@@ -14,6 +14,13 @@ export default async function sendImage(file,token) {
         body: formData,
     });
 
+    if(!res.ok) {
+        alert(await res.text());
+        return;
+    }
+
+    // console.log("Response status:", res.status);
+
     const text = await res.text();
     return text;
 }

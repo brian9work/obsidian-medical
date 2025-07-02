@@ -9,11 +9,17 @@ import com.obsidian.medical.model.UserModel;
 import com.obsidian.medical.repository.IExpedientRepository;
 import com.obsidian.medical.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-//import jakarta.validation.constraints.Pattern;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import java.io.File;
@@ -41,6 +47,30 @@ public class ExpedientService {
         if (!directory.exists()) {
             directory.mkdirs();
         }
+
+        // Validar tipo de contenido MIME
+        String contentType = file.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            return ResponseEntity.badRequest().body("El archivo no es una imagen válida.");
+        }
+
+        // Validar extensión del archivo (opcional pero recomendable)
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || !originalFilename.matches("(?i)^.+\\.(jpg|jpeg|png|gif|bmp|webp)$")) {
+            return ResponseEntity.badRequest().body("Extensión de imagen no permitida.");
+        }
+
+        // Validar que el archivo se puede leer como imagen
+        try {
+            BufferedImage image = ImageIO.read(file.getInputStream());
+            if (image == null) {
+                return ResponseEntity.badRequest().body("El archivo no es una imagen válida.");
+            }
+        } catch (IOException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la imagen.");
+            return ResponseEntity.badRequest().body("Error al procesar la imagen.");
+        }
+
 
         String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
         Path path = Paths.get(folderPath, filename); // <- Aquí corregido
@@ -128,8 +158,9 @@ public class ExpedientService {
         return ResponseEntity.ok("Expediente guardado");
     }
 
-    public List<ExpedientResponseDTO> getAll(){
-        List<ExpedientModel> expedientModels = expedientRepository.findAll();
+    public List<ExpedientResponseDTO> getAll(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ExpedientModel> expedientModels = expedientRepository.findAll(pageable);
         List<ExpedientResponseDTO> expedientResponseDTOS = new ArrayList<>();
 
         for (ExpedientModel expedientModel : expedientModels) {

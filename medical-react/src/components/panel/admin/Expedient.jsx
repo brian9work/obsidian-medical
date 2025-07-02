@@ -55,7 +55,6 @@ export default function Expedient({email}) {
     
           const urlImage = await sendImage(file,token);
           if (!urlImage) {
-             alert("Error al subir la imagen. Por favor, intenta nuevamente.");
              setLoading(false);
              return;
           }
