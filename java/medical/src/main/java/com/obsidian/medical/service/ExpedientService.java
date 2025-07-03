@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -144,7 +145,7 @@ public class ExpedientService {
         }
 
 
-        expedientModel.setUserModel(user.get());
+        expedientModel.setUser(user.get());
         expedientModel.setUrlImage(expReqDTO.getUrlImage());
         expedientModel.setName(expReqDTO.getName());
         expedientModel.setLastnamep(expReqDTO.getLastnamep());
@@ -158,9 +159,18 @@ public class ExpedientService {
         return ResponseEntity.ok("Expediente guardado");
     }
 
-    public List<ExpedientResponseDTO> getAll(int page, int size){
+    public ResponseEntity<List<ExpedientResponseDTO>> getAll(String email, int page, int size){
+        if (!Pattern.matches(RegexConstants.EMAIL_REGEX, email))
+            return ResponseEntity.badRequest().build();
+
+        Optional<UserModel> user = userRepository.isAdmin(email);
+        System.out.println(user.isPresent());
+        if(user.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         Pageable pageable = PageRequest.of(page, size);
-        Page<ExpedientModel> expedientModels = expedientRepository.findAll(pageable);
+        Page<ExpedientModel> expedientModels = expedientRepository.getByAdmin(email, pageable);
         List<ExpedientResponseDTO> expedientResponseDTOS = new ArrayList<>();
 
         for (ExpedientModel expedientModel : expedientModels) {
@@ -179,7 +189,7 @@ public class ExpedientService {
 
             expedientResponseDTOS.add(expedientResponseDTO);
         }
-        return expedientResponseDTOS;
+        return ResponseEntity.ok(expedientResponseDTOS);
     }
 
     public ExpedientResponseDTO getById(Long id) {

@@ -10,6 +10,7 @@ import com.obsidian.medical.model.ExpedientModel;
 import com.obsidian.medical.model.UserModel;
 import com.obsidian.medical.service.ExpedientService;
 import com.obsidian.medical.service.UserService;
+import com.obsidian.medical.utils.PaginatedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,9 +55,18 @@ public class ExpedientController {
     }
 
     @CrossOrigin(origins = "*")
-    @GetMapping("")
-    public List<ExpedientResponseDTO> getAll() {
-        return expedientService.getAll();
+    @PostMapping("/getByAdmin")
+    public ResponseEntity<List<ExpedientResponseDTO>> getAll(
+//    public PaginatedResponse<ExpedientResponseDTO> getAll(
+            @RequestBody Map<String, Object> body,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+
+    ) {
+
+        System.out.println("Buscando expedientes por admin");
+        String email = (String) body.get("email");
+        return expedientService.getAll(email, page, size);
     }
 
     @CrossOrigin(origins = "*")
@@ -73,3 +83,5 @@ public class ExpedientController {
 
 
 }
+
+//org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'expedientController' defined in file [C:\wamp64\www\obsidian-medical\java\medical\build\classes\java\main\com\obsidian\medical\controller\ExpedientController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'expedientService' defined in file [C:\wamp64\www\obsidian-medical\java\medical\build\classes\java\main\com\obsidian\medical\service\ExpedientService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'IExpedientRepository' defined in com.obsidian.medical.repository.IExpedientRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract java.util.List com.obsidian.medical.repository.IExpedientRepository.findByNotExpedient(); Reason: Validation failed for query for method public abstract java.util.List com.obsidian.medical.repository.IExpedientRepository.findByNotExpedient()

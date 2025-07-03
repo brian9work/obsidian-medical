@@ -19,7 +19,10 @@ public class ExpedientModel {
     Long id;
     @ManyToOne
     @JoinColumn(name = "id_user")
-    private UserModel userModel;
+    private UserModel user;
+    @ManyToOne
+    @JoinColumn(name = "id_admin")
+    private UserModel admin;
     String urlImage;
     String name;
     String lastnamep;

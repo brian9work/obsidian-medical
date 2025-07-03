@@ -19,20 +19,23 @@ import { useRouter } from "next/navigation"
 export default function Home() {
    const [data, setData] = useState([])
    const [loading, setLoading] = useState(true)
-   const { token } = useContextApp();
+   const { token, email } = useContextApp();
    const router = useRouter();
 
    const getData = async () => {
 
       try {
-         const response = await fetch("http://localhost:8080/expedient", {
-            method: "GET",
+         const response = await fetch("http://localhost:8080/expedient/getByAdmin", {
+            method: "POST",
             headers: {
                "Content-Type": "application/json",
                "Access-Control-Allow-Origin": "*",
                "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
                "Authorization": `Bearer ${token}`
-            }
+            },
+            body: JSON.stringify({
+               email: email
+            })
          })
          if (!response.ok) {
             router.push('/auth/login')
