@@ -123,11 +123,6 @@ public class UserService {
         if (user.isEmpty()) {
             throw new UsernameNotFoundException(email);
         }
-
-        System.out.println("\n\n\n");
-        System.out.println("temporal: " + user.get().getTmp());
-        System.out.println("token   : " + token);
-
         if(!user.get().getTmp().equals(token)){
             System.out.println("El correo no coincide con el token");
             throw new UsernameNotFoundException(email);

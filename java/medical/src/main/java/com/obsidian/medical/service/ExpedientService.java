@@ -110,7 +110,6 @@ public class ExpedientService {
 
 
         Optional<UserModel> user = userRepository.findByEmail(expReqDTO.getEmail());
-        System.out.println(user.isPresent());
         if(user.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -164,13 +163,16 @@ public class ExpedientService {
             return ResponseEntity.badRequest().build();
 
         Optional<UserModel> user = userRepository.isAdmin(email);
-        System.out.println(user.isPresent());
         if(user.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
 
         Pageable pageable = PageRequest.of(page, size);
         Page<ExpedientModel> expedientModels = expedientRepository.getByAdmin(email, pageable);
+        if(expedientModels.isEmpty()) {
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+
         List<ExpedientResponseDTO> expedientResponseDTOS = new ArrayList<>();
 
         for (ExpedientModel expedientModel : expedientModels) {

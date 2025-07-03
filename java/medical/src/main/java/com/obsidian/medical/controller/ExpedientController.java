@@ -43,9 +43,7 @@ public class ExpedientController {
     @CrossOrigin(origins = "*")
     @PostMapping("/getexpedient")
     public ExpedientResponseDTO getExpedient(@RequestBody Map<String, Object> body) {
-        System.out.println("Buscando expediente");
         String email = (String) body.get("email");
-        System.out.println("email" + email);
         if (email == null){
             System.out.println("no se recibieron los valores");
             return null;
@@ -63,8 +61,23 @@ public class ExpedientController {
             @RequestParam(defaultValue = "20") int size
 
     ) {
+        System.out.println(page);
+        System.out.println(size);
+        try {
+            Integer.parseInt(page+"");
+            Integer.parseInt(size+"");
+        } catch (NumberFormatException excepcion) {
+            page = 0;
+            size = 20;
+        }
 
-        System.out.println("Buscando expedientes por admin");
+        if(page<=-1 || size<=0 ){
+            page = 0;
+            size = 20;
+        }
+
+        System.out.println(page);
+        System.out.println(size);
         String email = (String) body.get("email");
         return expedientService.getAll(email, page, size);
     }

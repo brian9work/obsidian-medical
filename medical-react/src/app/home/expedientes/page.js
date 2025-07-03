@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { LogOutIcon, Plus } from "lucide-react"
+import { ArrowLeft, ArrowRight, LogOutIcon, Plus } from "lucide-react"
 import {
    Table,
    TableBody,
@@ -15,33 +15,45 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useContextApp } from "@/context/ContextApp"
 import { useRouter } from "next/navigation"
+import { Input } from "@/components/ui/input"
+import { Label } from "@radix-ui/react-select"
+import Pagination from "@/components/Pagination"
 
 export default function Home() {
+   const [pagination, setPagination] = useState({
+      page: 0,
+      size: 5,
+   })
    const [data, setData] = useState([])
    const [loading, setLoading] = useState(true)
    const { token, email } = useContextApp();
    const router = useRouter();
 
    const getData = async () => {
-
       try {
-         const response = await fetch("http://localhost:8080/expedient/getByAdmin", {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json",
-               "Access-Control-Allow-Origin": "*",
-               "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-               "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({
-               email: email
+         const response = await fetch(
+            `http://localhost:8080/expedient/getByAdmin?page=${pagination.page}&size=${pagination.size}`,
+            {
+               method: "POST",
+               headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+                  "Authorization": `Bearer ${token}`
+               },
+               body: JSON.stringify({
+                  email: email
+               })
             })
-         })
          if (!response.ok) {
-            router.push('/auth/login')
-            throw new Error("Network response was not ok")
+            // router.push('/auth/login')
+            console.log("No data")
+            // throw new Error("Network response was not ok")
          }
+         console.log("Response status:", response.status)
+         console.log(response)
          const result = await response.json()
+         console.log("Data fetched:", result)
          setData(result)
          setLoading(false)
       }
@@ -52,7 +64,7 @@ export default function Home() {
 
    useEffect(() => {
       getData()
-   }, [])
+   }, [pagination])
 
    return (
       <div>
@@ -70,7 +82,12 @@ export default function Home() {
                </Link>
             </div>
          </div>
-         <div className="mt-5">
+
+         <Pagination
+            pagination={pagination}
+            setPagination={setPagination}
+         >
+         <div className="mt-3">
             <Table>
                <TableCaption>Lista de expedientes.</TableCaption>
                <TableHeader >
@@ -110,6 +127,7 @@ export default function Home() {
                </TableBody>
             </Table>
          </div>
+         </Pagination>
       </div>
    )
 }
