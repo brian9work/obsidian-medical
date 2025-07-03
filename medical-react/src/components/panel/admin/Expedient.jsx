@@ -40,7 +40,6 @@ export default function Expedient({email}) {
           e.preventDefault();
           setLoading(true);
           const isValid = validateInputs();
-          console.log("Validación de entradas:", isValid);
     
           if (!isValid) {
              setLoading(false);
@@ -69,8 +68,6 @@ export default function Expedient({email}) {
              gender: gender,
              historial: historial,
           }
-    
-          console.log("Datos a enviar:", object);
     
           try {
              const response = await fetch("http://localhost:8080/expedient/save", {

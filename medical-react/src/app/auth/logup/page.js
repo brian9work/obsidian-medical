@@ -44,7 +44,6 @@ export default function Home() {
          password: password
       };
 
-      console.log("Datos a enviar:", object);
       try {
          const response = await fetch("http://localhost:8080/auth/logup", {
             method: "POST",
@@ -59,7 +58,6 @@ export default function Home() {
          })
          try {
             const data = await response.json()
-            console.log("Respuesta del servidor:", data);
             setTokenLocalStorage(data.token);
             setEmailLocalStorage(email);
             setIsLoading(false);

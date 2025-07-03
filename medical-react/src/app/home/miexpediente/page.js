@@ -26,20 +26,12 @@ export default function page() {
                     email: email
                 })
             })
-            console.log("Response status:", response)
             if (!response.ok) {
                 console.error("Failed to fetch data:", response.statusText)
             }
-            //  console.log("Response status:", response.status)
-            //  console.log("Response status:", response.status)
-            //  const resultText = await response.text()
-            //  console.log("Data fetched successfully:", resultText)
             const result = await response.json()
-            console.log("Data fetched successfully:", result)
             setData(result)
             setLoading(false)
-            //  console.log("Data fetched successfully:", result)
-
         }
         catch (error) {
             console.error("Error fetching data:", error)

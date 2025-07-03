@@ -36,7 +36,6 @@ export default function Home() {
          password: password
       };
 
-      console.log("Datos a enviar:", object);
       try {
          const response = await fetch("http://localhost:8080/auth/login", {
             method: "POST",

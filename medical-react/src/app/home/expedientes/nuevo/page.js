@@ -42,23 +42,9 @@ export default function Home() {
             console.error("Failed to fetch data:", response.statusText)
          }
 
-         console.log("Response status:", response)
          const json = await response.json()
-         console.log("Response text:", json)
          setData(json)
          setLoading(false)
-         // if (!response.ok) {
-         //    console.error("Failed to fetch data:", response.statusText)
-         // router.push('/auth/login')
-         // throw new Error("Network response was not ok")
-         // }
-         // console.log("Response status:", response.status)
-         // const result = await response.json()
-         // console.log("Data fetched successfully:", result)
-         // setData(result)
-         // setLoading(false)
-         // console.log("Data fetched successfully:", result)
-
       }
       catch (error) {
          console.error("Error fetching data:", error)

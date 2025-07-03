@@ -2,7 +2,6 @@ export default async function sendImage(file,token) {
     if (!file) return;
 
     const formData = new FormData();
-    console.log("Archivo seleccionado:", file.current.files[0]);
     const fileUpload = file.current.files[0];
     formData.append("file", fileUpload);
 
@@ -18,8 +17,6 @@ export default async function sendImage(file,token) {
         alert(await res.text());
         return;
     }
-
-    // console.log("Response status:", res.status);
 
     const text = await res.text();
     return text;

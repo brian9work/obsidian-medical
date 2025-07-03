@@ -1,6 +1,5 @@
 export default function changeImage (e,fileRef){
     const tmpFile = e.target.files[0];
-    console.log("Archivo seleccionado:", tmpFile);
     if (!tmpFile) {
         alert("Por favor, selecciona una imagen.");
         fileRef.current.value = null;
