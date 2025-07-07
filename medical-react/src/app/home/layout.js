@@ -80,7 +80,7 @@ export default function RootLayout({ children }) {
       return (
          <div>
             <Layout />
-            <div className="w-11/12 max-w-[1000px] mx-auto mt-10">
+            <div className="w-11/12 max-w-[1500px] mx-auto mt-10">
                <BreadcrumbPath />
                <div className="mt-3">
                   {children}
@@ -91,12 +91,12 @@ export default function RootLayout({ children }) {
    }
 
    return (
-      <div className="relative overflow-x-hidden ">
+      <div className="relative  ">
          <div>
             <UserLayout />
-            <div className="w-11/12 max-w-[1000px] mx-auto mt-10">
+            <div className="w-11/12 max-w-[1200px] mx-auto mt-10">
                <BreadcrumbPath />
-               <div className="mt-3">
+               <div className="w-full mt-3 relative ">
                   {children}
                </div>
             </div>

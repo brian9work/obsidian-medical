@@ -91,14 +91,12 @@ export default function Home() {
                         <TableCell>{item.email}</TableCell>
                         <TableCell>
                            <Dialog>
-                              <DialogTrigger>
-                                 <Button className={"bg-gray-900 text-white hover:bg-gray-800 cursor-pointer"}>
+                              <DialogTrigger className={"flex items-center gap-1 rounded-2xl px-3 py-1 bg-gray-900 text-white hover:bg-gray-800 cursor-pointer"}>
                                     <Plus className="mr-2 h-4 w-4" />
                                     Agregar Expediente
-                                 </Button>
                               </DialogTrigger>
                               <DialogContent className={`bg-white shadow-lg rounded-lg w-11/12 max-w-[1000px]`}>
-                                 <Expedient email={item.email} />
+                                 <Expedient emailUser={item.email} />
                               </DialogContent>
                            </Dialog>
                         </TableCell>
