@@ -3,10 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Activity, Heart, Ruler, Thermometer, Weight } from 'lucide-react'
 import { Badge } from '../ui/badge'
 
-export default function VitalSigns({vitalSigns}) {
+export default function VitalSigns({ vitalSigns }) {
    return (
       <div className='bg-white'>
-         <Card>
+         <Card className={"gap-0"}>
             <CardHeader>
                <CardTitle className="flex items-center gap-2">
                   <Heart className="h-5 w-5 text-red-600" />

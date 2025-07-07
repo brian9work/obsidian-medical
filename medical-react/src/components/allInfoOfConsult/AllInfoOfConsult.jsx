@@ -55,7 +55,7 @@ export default function AllInfoOfConsult({idDate}) {
         loading ? (
           <p>Loading...</p>
         ) : (
-          <div className="mx-auto max-w-6xl space-y-6">
+          <div className="mx-auto max-w-6xl space-y-3 pb-96">
             <PatientInfo expedient={data.expedient} />
             <InfoConsult consultationDate={data.consultationDate} />
             <MedicalHistory expedient={data.expedient} />

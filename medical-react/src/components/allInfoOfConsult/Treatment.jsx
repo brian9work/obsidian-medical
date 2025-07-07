@@ -6,7 +6,7 @@ import { Badge } from '../ui/badge'
 export default function Treatment({ treatments }) {
    return (
       <div className='bg-white'>
-         <Card>
+         <Card className={"gap-0"}>
             <CardHeader>
                <CardTitle className="flex items-center gap-2">
                   <Pill className="h-5 w-5 text-green-600" />

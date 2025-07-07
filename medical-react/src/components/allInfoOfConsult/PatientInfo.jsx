@@ -5,9 +5,9 @@ import { Calendar, Mail } from 'lucide-react'
 
 export default function PatientInfo({ expedient }) {
 	return (
-		<Card className="bg-white border-l-4 border-l-blue-500">
+		<Card className="bg-white border-l-4 border-l-blue-500 py-3">
 			<CardHeader className="">
-				<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+				<div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1">
 					<div className="flex items-center gap-4">
 						<div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center">
 							<User className="h-8 w-8 text-blue-600" />
