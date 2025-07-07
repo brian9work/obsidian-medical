@@ -18,8 +18,8 @@ public class TreatmentProgressModel {
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_treatment")
-    private TreatmentModel Treatment;
+    @JoinColumn(name = "id_consult")
+    private ConsultationModel consult;
 
     String date;
     String description;

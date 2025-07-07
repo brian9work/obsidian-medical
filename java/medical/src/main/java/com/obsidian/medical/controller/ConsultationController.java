@@ -22,6 +22,7 @@ public class ConsultationController {
     public ResponseEntity<String> save(@RequestBody AddConsultationRequestDTO request) {
         return treatmentService.saveConsultation(request);
     }
+
     @CrossOrigin(origins = "*")
     @GetMapping("/{id}")
     public ResponseEntity<AllConsultationDTO> save(@PathVariable("id") Long id) {
