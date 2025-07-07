@@ -48,9 +48,10 @@ export default function AddProgressTreatment({consultationId}) {
 
    return (
       <Dialog>
-         <DialogTrigger
-            className={"bg-gray-900 text-white hover:bg-gray-800 cursor-pointer py-1.5 px-3 rounded-2xl flex items-center"}>
-            Agregar signos vitales
+         <DialogTrigger>
+            <div className={"bg-gray-900 text-white hover:bg-gray-800 cursor-pointer py-1.5 px-3 rounded-2xl flex items-center"}>
+               Agregar signos vitales
+            </div>
          </DialogTrigger>
          <DialogContent className={`bg-white shadow-lg rounded-lg w-11/12 max-w-[1000px]`}>
             <DialogHeader>

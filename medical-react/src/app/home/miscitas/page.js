@@ -80,9 +80,9 @@ export default function page() {
                   <TableRow className={"bg-gray-900 text-white rounded-t-2xl"}>
                      <TableHead>Id</TableHead>
                      {/* <TableHead>Usuario</TableHead> */}
+                     <TableHead>Razon</TableHead>
                      <TableHead>Fecha</TableHead>
                      <TableHead>Hora</TableHead>
-                     <TableHead>Razon</TableHead>
                      <TableHead></TableHead>
                   </TableRow>
                </TableHeader>
@@ -100,13 +100,19 @@ export default function page() {
                      <TableRow key={`expediente-${item.id}`} className="hover:bg-gray-100 cursor-pointer">
                         <TableCell className="font-medium">#{item.id}</TableCell>
                         {/* <TableCell>{item.username}</TableCell> */}
+                        <TableCell>{item.reason}</TableCell>
                         <TableCell>{item.date}</TableCell>
                         <TableCell>{item.hour}</TableCell>
-                        <TableCell>{item.reason}</TableCell>
                         <TableCell>
-                           <Link href={`/home/miscitas/cita/${item.id}`} key={item.id}>
-                              <LogOutIcon className="h-4 w-4 text-gray-500 hover:text-gray-900 cursor-pointer" />
+                           {item.status !== "PENDIENTE" && 
+                           <Link 
+                              href={`/home/miscitas/cita/${item.id}`} 
+                              key={item.id}
+                              className="bg-blue-500 text-white px-7 py-1 rounded hover:bg-blue-600 transition-colors"
+                           >
+                              Ver cita
                            </Link>
+                           }
                         </TableCell>
                      </TableRow>
                   ))}

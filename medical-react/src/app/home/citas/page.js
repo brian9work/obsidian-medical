@@ -114,9 +114,6 @@ export default function page() {
                                        href={`/home/citas/no/${item.id}`} key={item.id}>
                                        Iniciar consulta
                                     </Link>
-                                    {/* <span className='bg-red-800 text-white hover:bg-red-600 cursor-pointer px-3 py-1 rounded-2xl '>
-                                       Cancelar cita
-                                    </span> */}
                                  </>
                               )}
                            </div>
