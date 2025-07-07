@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AllConsultationDTO {
+    Long id;
     VitalSignsRequestDTO vitalSigns;
     ConsultationDateRequestDTO consultationDate;
     ExpedientResponseDTO expedient;

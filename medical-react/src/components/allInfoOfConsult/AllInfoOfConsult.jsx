@@ -7,11 +7,13 @@ import MedicalHistory from './MedicalHistory';
 import DetailsConsult from './DetailsConsult';
 import VitalSigns from './VitalSigns';
 import Treatment from './Treatment';
+import AddProgressTreatment from './AddProgressTreatment';
 
 export default function AllInfoOfConsult({idDate}) {
    const [data, setData] = useState()
    const [loading, setLoading] = useState(true)
    const { token, email } = useContextApp();
+   const [consultationId, setConsultationId] = useState(null);
   //  const router = useRouter();
 
    const getData = async () => {
@@ -37,6 +39,7 @@ export default function AllInfoOfConsult({idDate}) {
          console.log(" +++++++++++++++ ")
          console.log("Data fetched:", result)
          setData(result)
+         setConsultationId(result.id)
          console.log("Data parsed:", data)
          setLoading(false)
       }
@@ -56,6 +59,7 @@ export default function AllInfoOfConsult({idDate}) {
           <p>Loading...</p>
         ) : (
           <div className="mx-auto max-w-6xl space-y-3 pb-96">
+            <AddProgressTreatment consultationId={consultationId} />
             <PatientInfo expedient={data.expedient} />
             <InfoConsult consultationDate={data.consultationDate} />
             <MedicalHistory expedient={data.expedient} />

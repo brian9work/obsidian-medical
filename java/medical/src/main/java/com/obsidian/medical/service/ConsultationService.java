@@ -51,6 +51,8 @@ public class ConsultationService {
 
         ConsultationModel consultation = optConsultation.get();
 
+        allConsultationDTO.setId(consultation.getId());
+
         // agregar signos vitales
         VitalSignsModel vitalSigns = consultation.getVitalSigns();
         VitalSignsRequestDTO vitalSignsResponseDTO = new VitalSignsRequestDTO();
