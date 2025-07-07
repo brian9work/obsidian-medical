@@ -19,16 +19,13 @@ public class TreatmentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @ManyToOne
-    @JoinColumn(name = "id_treatment_progress")
-    private TreatmentProgressModel TreatmentProgress;
     String name;
     String description;
     String dose;
     String time;
     String via;
-    LocalDateTime start_date;
-    LocalDateTime end_date;
+    String startDate;
+    String endDate;
 }
 
 

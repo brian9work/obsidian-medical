@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IExpedientRepository extends JpaRepository<ExpedientModel, Long> {
@@ -20,7 +21,7 @@ public interface IExpedientRepository extends JpaRepository<ExpedientModel, Long
 
     @Query(value="SELECT u FROM UserModel u " +
             "lEFT JOIN ExpedientModel e ON u.id  = e.user.id " +
-            "WHERE e.user.id IS NULL")
+            "WHERE e.user.id IS NULL AND u.role!='ADMIN' ")
     List<UserModel> findByNotExpedient();
 
     Page<ExpedientModel> findAll(Pageable pageable);
@@ -28,5 +29,7 @@ public interface IExpedientRepository extends JpaRepository<ExpedientModel, Long
     @Query(value="SELECT e FROM ExpedientModel e WHERE e.admin.email = :email")
     Page<ExpedientModel> getByAdmin(@Param("email") String email,
                                     Pageable pageable);
+
+    Optional<ExpedientModel> findByUser(UserModel user); 
 
 }

@@ -22,9 +22,9 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 
-export default function Expedient({email}) {
+export default function Expedient({emailUser}) {
        const [loading, setLoading] = useState(true)
-       const { token } = useContextApp();
+       const { token, email } = useContextApp();
        const router = useRouter();
     
        const file = useRef(null);
@@ -59,7 +59,8 @@ export default function Expedient({email}) {
           }
     
           const object = {
-             email: email,
+             email: emailUser,
+             admin: email,
              urlImage: urlImage,
              name: name,
              lastnamep: lastnamep,
@@ -68,6 +69,8 @@ export default function Expedient({email}) {
              gender: gender,
              historial: historial,
           }
+
+          console.log(object)
     
           try {
              const response = await fetch("http://localhost:8080/expedient/save", {
@@ -124,7 +127,10 @@ export default function Expedient({email}) {
                 <div>
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-bold text-gray-900">
-                            Agregar Expediente Médico a {email}
+                            Agregar Expediente Médico a 
+                            <span className="block text-gray-700 font-normal text-sm">
+                                {emailUser}
+                            </span>
                         </DialogTitle>
                     </DialogHeader>
                 </div>
@@ -132,7 +138,7 @@ export default function Expedient({email}) {
                     <div className="grid w-full max-w-sm items-center gap-3">
                         <Label htmlFor="picture">Picture</Label>
                         <Input
-                            className={`w-full`}
+                            className={`block w-full`}
                             id="picture"
                             type="file"
                             accept="image/*"

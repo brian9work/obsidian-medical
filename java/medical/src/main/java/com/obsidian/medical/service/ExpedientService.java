@@ -1,6 +1,6 @@
 package com.obsidian.medical.service;
 
-import com.obsidian.medical.constant.RegexConstants;
+import com.obsidian.medical.regex.RegexUser;
 import com.obsidian.medical.dto.expedient.ExpedientRequestDTO;
 import com.obsidian.medical.dto.expedient.ExpedientResponseDTO;
 import com.obsidian.medical.dto.expedient.UserWithExpedientDTO;
@@ -10,13 +10,11 @@ import com.obsidian.medical.repository.IExpedientRepository;
 import com.obsidian.medical.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -105,8 +103,11 @@ public class ExpedientService {
     public ResponseEntity save(ExpedientRequestDTO expReqDTO) {
         ExpedientModel expedientModel = new ExpedientModel();
 
-        if (!Pattern.matches(RegexConstants.EMAIL_REGEX, expReqDTO.getEmail()))
-            return ResponseEntity.badRequest().body(RegexConstants.EMAIL_MESSAGE);
+        if (!Pattern.matches(RegexUser.EMAIL_REGEX, expReqDTO.getEmail()))
+            return ResponseEntity.badRequest().body(RegexUser.EMAIL_MESSAGE);
+
+        if (!Pattern.matches(RegexUser.EMAIL_REGEX, expReqDTO.getAdmin()))
+            return ResponseEntity.badRequest().body(RegexUser.EMAIL_MESSAGE);
 
 
         Optional<UserModel> user = userRepository.findByEmail(expReqDTO.getEmail());
@@ -114,37 +115,43 @@ public class ExpedientService {
             return ResponseEntity.notFound().build();
         }
 
-        if (!Pattern.matches(RegexConstants.URL_IMAGE_REGEX, expReqDTO.getUrlImage())){
-            System.out.println(RegexConstants.URL_IMAGE_MESSAGE);
-            return ResponseEntity.badRequest().body(RegexConstants.URL_IMAGE_MESSAGE);
+        Optional<UserModel> admin = userRepository.findByEmail(expReqDTO.getAdmin());
+        if(admin.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
-        if (!Pattern.matches(RegexConstants.NAME_REGEX, expReqDTO.getName())){
-            System.out.println(RegexConstants.NAME_MESSAGE);
-            return ResponseEntity.badRequest().body(RegexConstants.NAME_MESSAGE);
+
+        if (!Pattern.matches(RegexUser.URL_IMAGE_REGEX, expReqDTO.getUrlImage())){
+            System.out.println(RegexUser.URL_IMAGE_MESSAGE);
+            return ResponseEntity.badRequest().body(RegexUser.URL_IMAGE_MESSAGE);
         }
-        if (!Pattern.matches(RegexConstants.LASTNAME_REGEX, expReqDTO.getLastnamep())){
-            System.out.println(RegexConstants.LASTNAME_MESSAGE);
-            return ResponseEntity.badRequest().body(RegexConstants.LASTNAME_MESSAGE);
+        if (!Pattern.matches(RegexUser.NAME_REGEX, expReqDTO.getName())){
+            System.out.println(RegexUser.NAME_MESSAGE);
+            return ResponseEntity.badRequest().body(RegexUser.NAME_MESSAGE);
         }
-        if (!Pattern.matches(RegexConstants.LASTNAME_REGEX, expReqDTO.getLastnamem())){
-            System.out.println(RegexConstants.LASTNAME_MESSAGE);
-            return ResponseEntity.badRequest().body(RegexConstants.LASTNAME_MESSAGE);
+        if (!Pattern.matches(RegexUser.LASTNAME_REGEX, expReqDTO.getLastnamep())){
+            System.out.println(RegexUser.LASTNAME_MESSAGE);
+            return ResponseEntity.badRequest().body(RegexUser.LASTNAME_MESSAGE);
         }
-        if (!Pattern.matches(RegexConstants.BIRTHDATE_REGEX, expReqDTO.getBirthdate())){
-            System.out.println(RegexConstants.BIRTHDATE_MESSAGE);
-            return ResponseEntity.badRequest().body(RegexConstants.BIRTHDATE_MESSAGE);
+        if (!Pattern.matches(RegexUser.LASTNAME_REGEX, expReqDTO.getLastnamem())){
+            System.out.println(RegexUser.LASTNAME_MESSAGE);
+            return ResponseEntity.badRequest().body(RegexUser.LASTNAME_MESSAGE);
         }
-        if (!Pattern.matches(RegexConstants.GENDER_REGEX, expReqDTO.getGender())){
-            System.out.println(RegexConstants.GENDER_MESSAGE);
-            return ResponseEntity.badRequest().body(RegexConstants.GENDER_MESSAGE);
+        if (!Pattern.matches(RegexUser.BIRTHDATE_REGEX, expReqDTO.getBirthdate())){
+            System.out.println(RegexUser.BIRTHDATE_MESSAGE);
+            return ResponseEntity.badRequest().body(RegexUser.BIRTHDATE_MESSAGE);
         }
-        if (!Pattern.matches(RegexConstants.HISTORIAL_REGEX, expReqDTO.getHistorial())){
-            System.out.println(RegexConstants.HISTORIAL_MESSAGE);
-            return ResponseEntity.badRequest().body(RegexConstants.HISTORIAL_MESSAGE);
+        if (!Pattern.matches(RegexUser.GENDER_REGEX, expReqDTO.getGender())){
+            System.out.println(RegexUser.GENDER_MESSAGE);
+            return ResponseEntity.badRequest().body(RegexUser.GENDER_MESSAGE);
+        }
+        if (!Pattern.matches(RegexUser.HISTORIAL_REGEX, expReqDTO.getHistorial())){
+            System.out.println(RegexUser.HISTORIAL_MESSAGE);
+            return ResponseEntity.badRequest().body(RegexUser.HISTORIAL_MESSAGE);
         }
 
 
         expedientModel.setUser(user.get());
+        expedientModel.setAdmin(admin.get());
         expedientModel.setUrlImage(expReqDTO.getUrlImage());
         expedientModel.setName(expReqDTO.getName());
         expedientModel.setLastnamep(expReqDTO.getLastnamep());
@@ -159,7 +166,7 @@ public class ExpedientService {
     }
 
     public ResponseEntity<List<ExpedientResponseDTO>> getAll(String email, int page, int size){
-        if (!Pattern.matches(RegexConstants.EMAIL_REGEX, email))
+        if (!Pattern.matches(RegexUser.EMAIL_REGEX, email))
             return ResponseEntity.badRequest().build();
 
         Optional<UserModel> user = userRepository.isAdmin(email);

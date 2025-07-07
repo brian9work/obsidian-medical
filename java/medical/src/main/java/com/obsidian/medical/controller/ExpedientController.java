@@ -93,8 +93,4 @@ public class ExpedientController {
     public List<UserWithExpedientDTO> findByNotExpedient() {
         return expedientService.findByNotExpedient();
     }
-
-
 }
-
-//org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'expedientController' defined in file [C:\wamp64\www\obsidian-medical\java\medical\build\classes\java\main\com\obsidian\medical\controller\ExpedientController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'expedientService' defined in file [C:\wamp64\www\obsidian-medical\java\medical\build\classes\java\main\com\obsidian\medical\service\ExpedientService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'IExpedientRepository' defined in com.obsidian.medical.repository.IExpedientRepository defined in @EnableJpaRepositories declared on JpaRepositoriesRegistrar.EnableJpaRepositoriesConfiguration: Could not create query for public abstract java.util.List com.obsidian.medical.repository.IExpedientRepository.findByNotExpedient(); Reason: Validation failed for query for method public abstract java.util.List com.obsidian.medical.repository.IExpedientRepository.findByNotExpedient()

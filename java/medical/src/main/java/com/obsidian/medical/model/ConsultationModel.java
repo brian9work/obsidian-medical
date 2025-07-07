@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "fechaConsultas")
+@Table(name = "consultas")
 public class ConsultationModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +23,11 @@ public class ConsultationModel {
     @JoinColumn(name = "id_vital_signs")
     private VitalSignsModel vitalSigns;
     @ManyToOne
-    @JoinColumn(name = "id_treatment")
-    private TreatmentModel treatment;
-    @ManyToOne
     @JoinColumn(name = "id_consultation_date")
     private ConsultationDateModel consultationsDate;
     String symptoms;
     String diagnosis;
     String indications;
     String studies;
-    String references;
+    String referencesText;
 }

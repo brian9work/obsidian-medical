@@ -8,7 +8,7 @@ import { useContextApp } from '@/context/ContextApp'
 
 const navigation = [
    { name: "Dashboard", href: "/dashboard", icon: Home },
-   { name: "Mis citas", href: "/dashboard/citas", icon: Calendar },
+   { name: "Mis citas", href: "/home/miscitas", icon: Calendar },
    { name: "Mi expediente", href: "/home/miexpediente", icon: FileText },
    { name: "Salir", href: "/auth/login", icon: LogOutIcon },
 ]

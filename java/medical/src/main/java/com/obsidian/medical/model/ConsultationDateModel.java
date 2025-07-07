@@ -1,5 +1,6 @@
 package com.obsidian.medical.model;
 
+import com.obsidian.medical.dto.enums.ConsultationDateRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "fechaConsultas")
+@Table(name = "fecha_consultas")
 public class ConsultationDateModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +22,7 @@ public class ConsultationDateModel {
     @ManyToOne
     @JoinColumn(name = "id_user")
     private UserModel user;
-    LocalDateTime date;
+    String date;
     String reason;
     String details;
     String status;

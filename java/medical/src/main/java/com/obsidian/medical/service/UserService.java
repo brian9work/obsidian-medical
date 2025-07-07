@@ -1,7 +1,7 @@
 package com.obsidian.medical.service;
 
 import com.obsidian.medical.auth.AuthResponse;
-import com.obsidian.medical.constant.RegexConstants;
+import com.obsidian.medical.regex.RegexUser;
 import com.obsidian.medical.dto.auth.LoginRequestDTO;
 import com.obsidian.medical.dto.auth.LogupRequestDTO;
 import com.obsidian.medical.dto.auth.UserRole;
@@ -9,7 +9,6 @@ import com.obsidian.medical.jwt.JwtService;
 import com.obsidian.medical.model.UserModel;
 import com.obsidian.medical.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,12 +30,12 @@ public class UserService {
 
     public AuthResponse login(LoginRequestDTO request) {
 
-        if (!Pattern.matches(RegexConstants.USER_REGEX, request.getUsername())){
-            System.out.println(RegexConstants.USER_MESSAGE);
+        if (!Pattern.matches(RegexUser.USER_REGEX, request.getUsername())){
+            System.out.println(RegexUser.USER_MESSAGE);
             return AuthResponse.builder().token(null).build();
         }
-        if (!Pattern.matches(RegexConstants.PASSWORD_REGEX, request.getPassword())){
-            System.out.println(RegexConstants.PASSWORD_MESSAGE);
+        if (!Pattern.matches(RegexUser.PASSWORD_REGEX, request.getPassword())){
+            System.out.println(RegexUser.PASSWORD_MESSAGE);
             return AuthResponse.builder().token(null).build();
         }
 
@@ -72,16 +71,16 @@ public class UserService {
 
     public AuthResponse logup(LogupRequestDTO request) {
 
-        if (!Pattern.matches(RegexConstants.EMAIL_REGEX, request.getEmail())){
-            System.out.println(RegexConstants.EMAIL_MESSAGE);
+        if (!Pattern.matches(RegexUser.EMAIL_REGEX, request.getEmail())){
+            System.out.println(RegexUser.EMAIL_MESSAGE);
             return AuthResponse.builder().token(null).build();
         }
-        if (!Pattern.matches(RegexConstants.USER_REGEX, request.getUsername())){
-            System.out.println(RegexConstants.USER_MESSAGE);
+        if (!Pattern.matches(RegexUser.USER_REGEX, request.getUsername())){
+            System.out.println(RegexUser.USER_MESSAGE);
             return AuthResponse.builder().token(null).build();
         }
-        if (!Pattern.matches(RegexConstants.PASSWORD_REGEX, request.getPassword())){
-            System.out.println(RegexConstants.PASSWORD_MESSAGE);
+        if (!Pattern.matches(RegexUser.PASSWORD_REGEX, request.getPassword())){
+            System.out.println(RegexUser.PASSWORD_MESSAGE);
             return AuthResponse.builder().token(null).build();
         }
 
@@ -128,5 +127,13 @@ public class UserService {
             throw new UsernameNotFoundException(email);
         }
         return user.get().getRole().toString();
+    }
+
+    public UserModel getUser(String email) {
+        Optional<UserModel> user = iuserRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException(email);
+        }
+        return user.get();
     }
 }

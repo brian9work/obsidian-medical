@@ -1,6 +1,4 @@
-package com.obsidian.medical.model;
-
-import jakarta.persistence.*;
+package com.obsidian.medical.dto.vitalSgins;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,17 +6,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "signosVitales")
-public class VitalSignsModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor
+public class VitalSignsResponseDTO {
     Long id;
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    private UserModel user;
     String bloodPressure;
     String weight;
     String height;
@@ -27,4 +18,3 @@ public class VitalSignsModel {
     String respiratoryRate;
     String date;
 }
-
