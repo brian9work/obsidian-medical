@@ -8,6 +8,7 @@ import com.obsidian.medical.dto.expedient.ExpedientRequestDTO;
 import com.obsidian.medical.dto.expedient.ExpedientResponseDTO;
 import com.obsidian.medical.dto.treatment.AddConsultationRequestDTO;
 import com.obsidian.medical.dto.treatment.AddTreatmentRequestDTO;
+import com.obsidian.medical.dto.treatment.TreatmentProgressRequestDTO;
 import com.obsidian.medical.dto.treatment.TreatmentRequestDTO;
 import com.obsidian.medical.dto.vitalSgins.VitalSignsRequestDTO;
 import com.obsidian.medical.model.*;
@@ -33,6 +34,7 @@ public class ConsultationService {
     private final IVitalSignsRepository vitalSignsRepository;
     private final IConsultationTreatmentRepository consultaTreatmentRepository;
     private final IConsultationDateRepository consultationDateRepository;
+    private final ITreatmentProgressRepository treatmentProgressRepository;
 
     private final ExpedientService expedientService;
 
@@ -129,6 +131,21 @@ public class ConsultationService {
             listTreatment.add(treatment);
         }
         allConsultationDTO.setTreatments(listTreatment);
+
+        // Progreso del tratamiento
+        List<TreatmentProgressModel> treatmentProgressList = treatmentProgressRepository.findByConsult(consultation);
+        List<TreatmentProgressRequestDTO> treatmentProgressRequestDTOList = new ArrayList<>();
+
+        for (TreatmentProgressModel treatmentProgressModel : treatmentProgressList) {
+            TreatmentProgressRequestDTO treatment = new TreatmentProgressRequestDTO();
+            treatment.setConsultationId(treatmentProgressModel.getId());
+            treatment.setDate(treatmentProgressModel.getDate());
+            treatment.setDetails(treatmentProgressModel.getDescription());
+
+            treatmentProgressRequestDTOList.add(treatment);
+        }
+
+        allConsultationDTO.setProgress(treatmentProgressRequestDTOList);
 
 
         return ResponseEntity.ok().body(allConsultationDTO);

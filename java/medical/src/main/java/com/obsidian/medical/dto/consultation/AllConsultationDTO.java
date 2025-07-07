@@ -2,6 +2,7 @@ package com.obsidian.medical.dto.consultation;
 import com.obsidian.medical.dto.consultationDate.ConsultationDateRequestDTO;
 import com.obsidian.medical.dto.expedient.ExpedientResponseDTO;
 import com.obsidian.medical.dto.treatment.AddTreatmentRequestDTO;
+import com.obsidian.medical.dto.treatment.TreatmentProgressRequestDTO;
 import com.obsidian.medical.dto.vitalSgins.VitalSignsRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,4 +23,5 @@ public class AllConsultationDTO {
     ConsultationDTO consultation;
     ConsultationUserDTO consultationUser;
     List<AddTreatmentRequestDTO> treatments;
+    List<TreatmentProgressRequestDTO> progress;
 }
