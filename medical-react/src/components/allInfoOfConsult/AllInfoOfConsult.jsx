@@ -8,6 +8,7 @@ import DetailsConsult from './DetailsConsult';
 import VitalSigns from './VitalSigns';
 import Treatment from './Treatment';
 import AddProgressTreatment from './AddProgressTreatment';
+import ProgressTreatment from './ProgressTreatment';
 
 export default function AllInfoOfConsult({idDate}) {
    const [data, setData] = useState()
@@ -66,6 +67,7 @@ export default function AllInfoOfConsult({idDate}) {
             <DetailsConsult consultation={data.consultation} />
             <VitalSigns vitalSigns={data.vitalSigns} />
             <Treatment treatments={data.treatments} />
+            <ProgressTreatment progress={data.progress} />
           </div>
         )
       }
